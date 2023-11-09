@@ -1,0 +1,3 @@
+﻿  Source.c
+C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(66,10): warning C4013: pop: нет определения; предполагается "extern" с возвратом типа "int"
+  LabaA4.1-20.vcxproj -> C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\x64\Debug\LabaA4.1-20.exe
