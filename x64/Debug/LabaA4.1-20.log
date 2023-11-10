@@ -1,3 +1,6 @@
 ﻿  Source.c
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(66,10): warning C4013: pop: нет определения; предполагается "extern" с возвратом типа "int"
-  LabaA4.1-20.vcxproj -> C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\x64\Debug\LabaA4.1-20.exe
+C:\Users\d.konovalov\Source\Repos\Laba4.1-20\Source.c(62,3): warning C4033: 'delByVal' must return a value
+C:\Users\d.konovalov\Source\Repos\Laba4.1-20\Source.c(66,10): warning C4013: 'pop' undefined; assuming extern returning int
+C:\Users\d.konovalov\Source\Repos\Laba4.1-20\Source.c(80,2): warning C4033: 'delByVal' must return a value
+C:\Users\d.konovalov\Source\Repos\Laba4.1-20\Source.c(81): warning C4715: 'delByVal': not all control paths return a value
+  LabaA4.1-20.vcxproj -> C:\Users\d.konovalov\Source\Repos\Laba4.1-20\x64\Debug\LabaA4.1-20.exe
