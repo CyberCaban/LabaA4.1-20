@@ -17,29 +17,32 @@ int intInput(int* size) {
 	return 1;
 }
 
-int listCIN(TNode** head, int size_n) {
-	int tmp;
-	for (int i = 0; i < size_n; i++) {
-		if (!scanf_s("%d", &tmp)) {
-			return 0;
-		}
-		//pushStart((head), tmp);
-	}
-	return 1;
-}
-
-void pushStart(TNode** head, int data) {
+int pushStart(TNode** head, int data) {
 	TNode* tmp = malloc(sizeof(TNode));
+
 	if (tmp == NULL) {
-		return;
+		return 0;
 	}
 
 	tmp->val = data;
 	tmp->next = (*head);
 	(*head) = tmp;
+	return 1;
 }
 
-int findFirstOverlap(TNode* head, int overlapVal) {
+int listCIN(TNode** head, int size_n) {
+	int tmp;
+
+	for (int i = 0; i < size_n; i++) {
+		if (!scanf_s("%d", &tmp)) {
+			return 0;
+		}
+		pushStart(head, tmp);
+	}
+	return 1;
+}
+
+int findFirstOverlap(const TNode* head, int overlapVal) {
 	if (head == NULL) {
 		return -2; // список пустой
 	}
@@ -58,8 +61,8 @@ int findFirstOverlap(TNode* head, int overlapVal) {
 int delByVal(TNode** head, int delVal) {
 	TNode* curr, * prev;
 
-	if ((*head) == NULL) {
-		return -2; // список пустой
+	if (head == NULL) {
+		return; // список пустой
 	}
 
 	if ((*head)->val == delVal) {
@@ -77,7 +80,7 @@ int delByVal(TNode** head, int delVal) {
 		prev = curr;
 		curr = curr->next;
 	}
-	return -1;
+	return;
 }
 
 int pop(TNode** head) {
@@ -92,31 +95,60 @@ int pop(TNode** head) {
 	return retVal;
 }
 
-void listCOUT(TNode* head) {
+int listCMAKE(const TNode* headIN, TNode** headOUT) {
+	TNode* curr;
+	if (headIN == NULL){
+		return 0;
+	}
+
+	while (headIN){
+		if (headIN->val < 0){
+			pushStart(headOUT, headIN->val);
+		}
+
+		headIN = headIN->next;
+	}
+	return 1;
+}
+
+int listCOUT(const TNode* head) {
 	if (head == NULL) {
-		return;
+		return 0;
 	}
 
 	int i = 0;
-	while (head->next != NULL) {
+	while (head) {
 		printf("List No. %d\n", i);
 		printf("value: %d\n", head->val);
-		printf("address: %p\n", (void*)head->next);
+		printf("address: %p\n", (void*)head);
 		printf("\n");
 		head = head->next;
 		i++;
 	}
+	return 1;
+}
+
+int listFREE(TNode** head) {
+	if (head == NULL) {
+		return 0;
+	}
+
+	TNode* prev = NULL;
+	TNode* curr = (*head);
+	while (curr->next){
+		prev = curr;
+		curr = curr->next;
+		free(prev);
+	}
+	free(curr);
+
+	return 1;
 }
 
 int main() {
 	int n;
-	TNode* listIN = (TNode*)malloc(sizeof(TNode));
-	if (listIN == NULL) return 1;
-	listIN->next = NULL;
-
-	TNode* listOUT = (TNode*)malloc(sizeof(TNode));
-	if (listOUT == NULL) return 1;
-	listOUT->next = NULL;
+	TNode* listIN = NULL;
+	TNode* listOUT = NULL;
 
 	printf("create a list of how many elements?\n");
 	if (!intInput(&n)) {
@@ -124,41 +156,19 @@ int main() {
 		return;
 	}
 
-	//listCIN(&head, n);
-	int tmp;
-	for (int i = 0; i < n; i++) {
-		if (!scanf_s("%d", &tmp)) {
-			printf("You entered not a integer");
-			return 0;
-		}
-		pushStart(&listIN, tmp);
-	}
+	printf("input list elements\n");
+	listCIN(&listIN, n);
 
-	/*TNode* currEl = listIN;
-	while (currEl->next != NULL) {
-		int currVal = currEl->val;
-		if (currVal < 0) {
-			pushStart(&listOUT, currVal);
-		}
-		currEl = currEl->next;
-	}*/
-	TNode* currEl = listIN->next;
-	while (1) {
-		if (currEl->next != NULL) {
-			int currVal = currEl->val;
-			if (currVal < 0) {
-				pushStart(&listOUT, currVal);
-			}
-			currEl = currEl->next;
-		}
-	}
-	printf("%d", findFirstOverlap(listIN, -1));
-	delByVal(&listIN, findFirstOverlap(listIN, -1));
+	printf("%d", listCMAKE(listIN, &listOUT));
 
 	printf("\ninput\n");
 	listCOUT(listIN);
+
 	printf("\noutput\n");
 	listCOUT(listOUT);
 
-	return 0;
+	listFREE(&listIN);
+	listFREE(&listOUT);
+
+	return;
 }
