@@ -42,7 +42,7 @@ int listCIN(TNode** head, int size_n) {
 	return 1;
 }
 
-int findFirstOverlap(const TNode* head, int overlapVal) {
+int listFindFirstOverlap(const TNode* head, int overlapVal) {
 	if (head == NULL) {
 		return -2; // список пустой
 	}
@@ -58,7 +58,7 @@ int findFirstOverlap(const TNode* head, int overlapVal) {
 	return -1; // значение не найдено
 }
 
-int delByVal(TNode** head, int delVal) {
+int listDelByVal(TNode** head, int delVal) {
 	TNode* curr, * prev;
 
 	if (head == NULL) {
@@ -66,7 +66,7 @@ int delByVal(TNode** head, int delVal) {
 	}
 
 	if ((*head)->val == delVal) {
-		return pop(head);
+		return listPop(head);
 	}
 
 	prev = (*head);
@@ -83,7 +83,7 @@ int delByVal(TNode** head, int delVal) {
 	return;
 }
 
-int pop(TNode** head) {
+int listPop(TNode** head) {
 	int retVal = -1;
 	TNode* nextNode = NULL;
 
@@ -111,6 +111,36 @@ int listCMAKE(const TNode* headIN, TNode** headOUT) {
 	return 1;
 }
 
+TNode* listFindMin(TNode* head) {
+	TNode* next = NULL;
+
+	for (next = head->next; next; next = next->next){
+		if (next->val < head->val) {
+			head = next;
+		}
+	}
+
+	return head;
+}
+
+int listSort(TNode** head) {
+	if (head == NULL) {
+		return 0;
+	}
+
+	TNode* curr = (*head);
+	for (; curr; curr = curr->next) {
+		TNode* minEl = listFindMin(curr);
+
+		if (minEl != curr){
+			int tmp = curr->val;
+			curr->val = minEl->val;
+			minEl->val = tmp;
+		}
+	}
+	return 1;
+}
+
 int listCOUT(const TNode* head) {
 	if (head == NULL) {
 		return 0;
@@ -128,7 +158,7 @@ int listCOUT(const TNode* head) {
 	return 1;
 }
 
-int listFREE(TNode** head) {
+int listFree(TNode** head) {
 	if (head == NULL) {
 		return 0;
 	}
@@ -160,6 +190,7 @@ int main() {
 	listCIN(&listIN, n);
 
 	printf("%d", listCMAKE(listIN, &listOUT));
+	listSort(&listOUT);
 
 	printf("\ninput\n");
 	listCOUT(listIN);
@@ -167,8 +198,8 @@ int main() {
 	printf("\noutput\n");
 	listCOUT(listOUT);
 
-	listFREE(&listIN);
-	listFREE(&listOUT);
+	listFree(&listIN);
+	listFree(&listOUT);
 
 	return;
 }
