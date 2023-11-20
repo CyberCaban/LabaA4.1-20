@@ -97,16 +97,14 @@ int listPop(TNode** head) {
 
 int listCMAKE(const TNode* headIN, TNode** headOUT) {
 	TNode* curr;
-	if (headIN == NULL){
+	if (headIN == NULL) {
 		return 0;
 	}
 
-	while (headIN){
-		if (headIN->val < 0){
+	for (; headIN; headIN = headIN->next) {
+		if (headIN->val < 0) {
 			pushStart(headOUT, headIN->val);
 		}
-
-		headIN = headIN->next;
 	}
 	return 1;
 }
@@ -114,7 +112,7 @@ int listCMAKE(const TNode* headIN, TNode** headOUT) {
 TNode* listFindMin(TNode* head) {
 	TNode* next = NULL;
 
-	for (next = head->next; next; next = next->next){
+	for (next = head->next; next; next = next->next) {
 		if (next->val < head->val) {
 			head = next;
 		}
@@ -132,7 +130,7 @@ int listSort(TNode** head) {
 	for (; curr; curr = curr->next) {
 		TNode* minEl = listFindMin(curr);
 
-		if (minEl != curr){
+		if (minEl != curr) {
 			int tmp = curr->val;
 			curr->val = minEl->val;
 			minEl->val = tmp;
@@ -147,13 +145,11 @@ int listCOUT(const TNode* head) {
 	}
 
 	int i = 0;
-	while (head) {
+	for (; head; head = head->next, i++) {
 		printf("List No. %d\n", i);
 		printf("value: %d\n", head->val);
 		printf("address: %p\n", (void*)head);
 		printf("\n");
-		head = head->next;
-		i++;
 	}
 	return 1;
 }
@@ -165,9 +161,8 @@ int listFree(TNode** head) {
 
 	TNode* prev = NULL;
 	TNode* curr = (*head);
-	while (curr->next){
+	for (; curr->next; curr = curr->next) {
 		prev = curr;
-		curr = curr->next;
 		free(prev);
 	}
 	free(curr);
