@@ -46,12 +46,17 @@ int pushEnd(TNode** head, int data) {
 
 int listCIN(TNode** head) {
 	int tmp;
+	char ch;
 
 	while (1) {
-		if (!scanf("%d", &tmp)) {
+		if (!scanf("%d%c", &tmp, &ch)) {
+			printf("invalid input");
 			return 0;
 		}
 		pushStart(head, tmp);
+		if (ch == '.') {
+			break;
+		}
 	}
 	return 1;
 }
@@ -142,9 +147,6 @@ void listDelNth(TNode** head, TNode* delEl) {
 				free(curr);
 				break;
 			}
-			if (curr == NULL) {
-				break;
-			}
 			curr = curr->next;
 			prev = prev->next;
 		}
@@ -200,7 +202,7 @@ int listCOUT(const TNode* head) {
 
 	int i = 0;
 	for (; head; head = head->next, i++) {
-		printf("\nList No. %d\n", i);
+		printf("List No. %d\n", i);
 		printf("value: %d\n", head->val);
 		printf("address: %p\n\n", (void*)head);
 	}
@@ -226,8 +228,10 @@ int main() {
 	TNode* listIN = NULL;
 	TNode* listOUT = NULL;
 
-	printf("input list elements, end input by inputting .\n");
-	listCIN(&listIN);
+	printf("enter list items, end the entry with a .\n");
+	if (!listCIN(&listIN)) {
+		return;
+	}
 
 	listCMAKE(&listIN, &listOUT);
 
