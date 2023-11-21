@@ -20,6 +20,30 @@ int pushStart(TNode** head, int data) {
 	return 1;
 }
 
+int pushEnd(TNode** head, int data) {
+	TNode* tmp = (TNode*)malloc(sizeof(TNode));
+
+	if (tmp == NULL) {
+		return 0;
+	}
+	tmp->next = NULL;
+
+	TNode* curr = (*head); 
+	if (curr == NULL) {
+		tmp->val = data;
+		(*head) = tmp;
+	}
+	else {
+		for (; curr; curr = curr->next) {
+			if (curr->next == NULL) {
+				tmp->val = data;
+				curr->next = tmp;
+				return;
+			}
+		}
+	}
+}
+
 int listCIN(TNode** head) {
 	int tmp;
 
@@ -74,8 +98,12 @@ int listDelByVal(TNode** head, int delVal) {
 }
 
 int listPop(TNode** head) {
-	int retVal = -1;
+	int retVal;
 	TNode* nextNode = NULL;
+
+	if ((*head) == NULL) {
+		return 0;
+	}
 
 	nextNode = (*head)->next;
 	retVal = (*head)->val;
@@ -85,65 +113,63 @@ int listPop(TNode** head) {
 	return retVal;
 }
 
-
 TNode* listFindMin(TNode* head) {
-	TNode* nextEL = NULL;
+	TNode* nextEL = head->next;
 
-	for (nextEL = head->next; nextEL; nextEL = nextEL->next) {
+	for (; nextEL;) {
+		if (nextEL == NULL) {
+			return head;
+		}
 		if (nextEL->val < head->val) {
 			head = nextEL;
-			break;
 		}
+		nextEL = nextEL->next;
 	}
 
 	return head;
 }
 
-void listDelEl(TNode** head, TNode* delEl) {
-	TNode* prev = NULL;
-	TNode* curr = (*head);
+void listDelNth(TNode** head, TNode* delEl) {
+	if ((*head) == delEl) {
+		listPop(head);
+	}
+	else {
+		TNode* prev = (*head), * curr = (*head)->next;
 
-	while (1) {
-		if (curr == delEl && prev == NULL) {
-			prev = curr;
+		while (prev) {
+			if (curr == delEl) {
+				prev->next = curr->next;
+				free(curr);
+				break;
+			}
+			if (curr == NULL) {
+				break;
+			}
 			curr = curr->next;
-			free(prev);
-			break;
-		}
-		if (curr == delEl && prev != NULL){
-			prev->next = curr->next; 
-			free(curr); 
-			break;
-		}
-		prev = curr;
-		curr = curr->next;
-		if (curr == NULL) {
-			break;
+			prev = prev->next;
 		}
 	}
 }
 
 int listCMAKE(TNode** headIN, TNode** headOUT) {
-	if (headIN == NULL) {
+	if ((*headIN) == NULL) {
 		return 0;
 	}
 
-	TNode* curr = (*headIN);
-	while (1) {
-		if (curr == NULL){
+
+	for (TNode* curr = (*headIN); curr; curr = curr->next) {
+		curr = (*headIN);
+		if (curr == NULL) {
 			break;
 		}
+
 		TNode* minEl = listFindMin(curr);
 		if (minEl->val < 0) {
-			pushStart(headOUT, minEl->val);
-			listDelEl(headIN, minEl);
+			pushEnd(headOUT, minEl->val);
+			listDelNth(headIN, minEl);
 		}
 		else {
-			curr = curr->next;
-			if (curr == NULL)
-			{
-				break;
-			}
+			break;
 		}
 	}
 	return 1;
@@ -182,7 +208,7 @@ int listCOUT(const TNode* head) {
 }
 
 int listFree(TNode** head) {
-	if (head == NULL) {
+	if ((*head) == NULL) {
 		return 0;
 	}
 
@@ -205,7 +231,6 @@ int main() {
 	listCIN(&listIN);
 
 	listCMAKE(&listIN, &listOUT);
-	listSort(&listOUT);
 
 	printf("\ninput\n");
 	listCOUT(listIN);
@@ -213,6 +238,6 @@ int main() {
 	printf("\noutput\n");
 	listCOUT(listOUT);
 
-	listFree(&listIN);
-	listFree(&listOUT);
+	/*listFree(&listIN);
+	listFree(&listOUT);*/
 }
