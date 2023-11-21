@@ -1,24 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#define N 20
 
 typedef struct Node {
 	int val;
 	struct Node* next;
 } TNode;
 
-int intInput(int* size) {
-	int size_n = 0;
-	if (!scanf_s("%d", &size_n) || size_n > N || size_n < 0) {
-		return 0;
-	}
-	*size = size_n;
-	return 1;
-}
-
 int pushStart(TNode** head, int data) {
-	TNode* tmp = malloc(sizeof(TNode));
+	TNode* tmp = (TNode*)malloc(sizeof(TNode));
 
 	if (tmp == NULL) {
 		return 0;
@@ -30,11 +20,11 @@ int pushStart(TNode** head, int data) {
 	return 1;
 }
 
-int listCIN(TNode** head, int size_n) {
+int listCIN(TNode** head) {
 	int tmp;
 
-	for (int i = 0; i < size_n; i++) {
-		if (!scanf_s("%d", &tmp)) {
+	while (1) {
+		if (!scanf("%d", &tmp)) {
 			return 0;
 		}
 		pushStart(head, tmp);
@@ -95,30 +85,68 @@ int listPop(TNode** head) {
 	return retVal;
 }
 
-int listCMAKE(const TNode* headIN, TNode** headOUT) {
-	TNode* curr;
-	if (headIN == NULL) {
-		return 0;
-	}
-
-	for (; headIN; headIN = headIN->next) {
-		if (headIN->val < 0) {
-			pushStart(headOUT, headIN->val);
-		}
-	}
-	return 1;
-}
 
 TNode* listFindMin(TNode* head) {
-	TNode* next = NULL;
+	TNode* nextEL = NULL;
 
-	for (next = head->next; next; next = next->next) {
-		if (next->val < head->val) {
-			head = next;
+	for (nextEL = head->next; nextEL; nextEL = nextEL->next) {
+		if (nextEL->val < head->val) {
+			head = nextEL;
+			break;
 		}
 	}
 
 	return head;
+}
+
+void listDelEl(TNode** head, TNode* delEl) {
+	TNode* prev = NULL;
+	TNode* curr = (*head);
+
+	while (1) {
+		if (curr == delEl && prev == NULL) {
+			prev = curr;
+			curr = curr->next;
+			free(prev);
+			break;
+		}
+		if (curr == delEl && prev != NULL){
+			prev->next = curr->next; 
+			free(curr); 
+			break;
+		}
+		prev = curr;
+		curr = curr->next;
+		if (curr == NULL) {
+			break;
+		}
+	}
+}
+
+int listCMAKE(TNode** headIN, TNode** headOUT) {
+	if (headIN == NULL) {
+		return 0;
+	}
+
+	TNode* curr = (*headIN);
+	while (1) {
+		if (curr == NULL){
+			break;
+		}
+		TNode* minEl = listFindMin(curr);
+		if (minEl->val < 0) {
+			pushStart(headOUT, minEl->val);
+			listDelEl(headIN, minEl);
+		}
+		else {
+			curr = curr->next;
+			if (curr == NULL)
+			{
+				break;
+			}
+		}
+	}
+	return 1;
 }
 
 int listSort(TNode** head) {
@@ -146,10 +174,9 @@ int listCOUT(const TNode* head) {
 
 	int i = 0;
 	for (; head; head = head->next, i++) {
-		printf("List No. %d\n", i);
+		printf("\nList No. %d\n", i);
 		printf("value: %d\n", head->val);
-		printf("address: %p\n", (void*)head);
-		printf("\n");
+		printf("address: %p\n\n", (void*)head);
 	}
 	return 1;
 }
@@ -171,20 +198,13 @@ int listFree(TNode** head) {
 }
 
 int main() {
-	int n;
 	TNode* listIN = NULL;
 	TNode* listOUT = NULL;
 
-	printf("create a list of how many elements?\n");
-	if (!intInput(&n)) {
-		printf("invalid list size");
-		return;
-	}
+	printf("input list elements, end input by .\n");
+	listCIN(&listIN);
 
-	printf("input list elements\n");
-	listCIN(&listIN, n);
-
-	printf("%d", listCMAKE(listIN, &listOUT));
+	listCMAKE(&listIN, &listOUT);
 	listSort(&listOUT);
 
 	printf("\ninput\n");
@@ -195,6 +215,4 @@ int main() {
 
 	listFree(&listIN);
 	listFree(&listOUT);
-
-	return;
 }

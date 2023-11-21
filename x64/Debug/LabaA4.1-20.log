@@ -1,7 +1,6 @@
 ﻿  Source.c
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(65,3): warning C4033: "listDelByVal" должен возвращать значение
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(69,10): warning C4013: listPop: нет определения; предполагается "extern" с возвратом типа "int"
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(83,2): warning C4033: "listDelByVal" должен возвращать значение
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(99,9): warning C4101: curr: неиспользованная локальная переменная
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(84): warning C4715: listDelByVal: значение возвращается не при всех путях выполнения
-  LabaA4.1-20.vcxproj -> C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\x64\Debug\LabaA4.1-20.exe
+C:\Users\d.konovalov\Source\Repos\LabaA4.1-20\Source.c(55,3): warning C4033: 'listDelByVal' must return a value
+C:\Users\d.konovalov\Source\Repos\LabaA4.1-20\Source.c(59,10): warning C4013: 'listPop' undefined; assuming extern returning int
+C:\Users\d.konovalov\Source\Repos\LabaA4.1-20\Source.c(73,2): warning C4033: 'listDelByVal' must return a value
+C:\Users\d.konovalov\Source\Repos\LabaA4.1-20\Source.c(74): warning C4715: 'listDelByVal': not all control paths return a value
+  LabaA4.1-20.vcxproj -> C:\Users\d.konovalov\Source\Repos\LabaA4.1-20\x64\Debug\LabaA4.1-20.exe
