@@ -211,14 +211,13 @@ int listFree(TNode** head) {
 	if ((*head) == NULL) {
 		return 0;
 	}
-
 	TNode* prev = NULL;
-	TNode* curr = (*head);
-	for (; curr->next; curr = curr->next) {
-		prev = curr;
+	for (; (*head)->next; ) {
+		prev = (*head);
+		(*head) = (*head)->next;
 		free(prev);
 	}
-	free(curr);
+	free((*head));
 
 	return 1;
 }
@@ -227,7 +226,7 @@ int main() {
 	TNode* listIN = NULL;
 	TNode* listOUT = NULL;
 
-	printf("input list elements, end input by .\n");
+	printf("input list elements, end input by inputting .\n");
 	listCIN(&listIN);
 
 	listCMAKE(&listIN, &listOUT);
@@ -238,6 +237,6 @@ int main() {
 	printf("\noutput\n");
 	listCOUT(listOUT);
 
-	/*listFree(&listIN);
-	listFree(&listOUT);*/
+	listFree(&listIN);
+	listFree(&listOUT);
 }

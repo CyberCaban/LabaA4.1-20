@@ -3,6 +3,6 @@ C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(41,5): warning C4033: "pu
 C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(79,3): warning C4033: "listDelByVal" должен возвращать значение
 C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(83,10): warning C4013: listPop: нет определения; предполагается "extern" с возвратом типа "int"
 C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(97,2): warning C4033: "listDelByVal" должен возвращать значение
-C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(98): warning C4715: listDelByVal: значение возвращается не при всех путях выполнения
 C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(45): warning C4715: pushEnd: значение возвращается не при всех путях выполнения
+C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\Source.c(98): warning C4715: listDelByVal: значение возвращается не при всех путях выполнения
   LabaA4.1-20.vcxproj -> C:\Users\Dmitry K\Desktop\dev\c++\LabaA4.1-20\x64\Debug\LabaA4.1-20.exe
