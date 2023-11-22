@@ -7,24 +7,11 @@ typedef struct Node {
 	struct Node* next;
 } TNode;
 
-int pushStart(TNode** head, int data) {
+void pushEnd(TNode** head, int data) {
 	TNode* tmp = (TNode*)malloc(sizeof(TNode));
 
 	if (tmp == NULL) {
-		return 0;
-	}
-
-	tmp->val = data;
-	tmp->next = (*head);
-	(*head) = tmp;
-	return 1;
-}
-
-int pushEnd(TNode** head, int data) {
-	TNode* tmp = (TNode*)malloc(sizeof(TNode));
-
-	if (tmp == NULL) {
-		return 0;
+		return;
 	}
 	tmp->next = NULL;
 
@@ -53,53 +40,12 @@ int listCIN(TNode** head) {
 			printf("invalid input");
 			return 0;
 		}
-		pushStart(head, tmp);
+		pushEnd(head, tmp);
 		if (ch == '.') {
 			break;
 		}
 	}
 	return 1;
-}
-
-int listFindFirstOverlap(const TNode* head, int overlapVal) {
-	if (head == NULL) {
-		return -2; // список пустой
-	}
-
-	int i = 0;
-	while (head->next) {
-		if (head->val == overlapVal) {
-			return i;
-		}
-		i++;
-		head = head->next;
-	}
-	return -1; // значение не найдено
-}
-
-int listDelByVal(TNode** head, int delVal) {
-	TNode* curr, * prev;
-
-	if (head == NULL) {
-		return; // список пустой
-	}
-
-	if ((*head)->val == delVal) {
-		return listPop(head);
-	}
-
-	prev = (*head);
-	curr = (*head)->next;
-	while (curr) {
-		if (curr->val == delVal) {
-			prev->next = curr->next;
-			free(curr);
-			return delVal;
-		}
-		prev = curr;
-		curr = curr->next;
-	}
-	return;
 }
 
 int listPop(TNode** head) {
@@ -153,11 +99,10 @@ void listDelNth(TNode** head, TNode* delEl) {
 	}
 }
 
-int listCMAKE(TNode** headIN, TNode** headOUT) {
+void listCMAKE(TNode** headIN, TNode** headOUT) {
 	if ((*headIN) == NULL) {
-		return 0;
+		return;
 	}
-
 
 	for (TNode* curr = (*headIN); curr; curr = curr->next) {
 		curr = (*headIN);
@@ -174,30 +119,11 @@ int listCMAKE(TNode** headIN, TNode** headOUT) {
 			break;
 		}
 	}
-	return 1;
 }
 
-int listSort(TNode** head) {
+void listCOUT(const TNode* head) {
 	if (head == NULL) {
-		return 0;
-	}
-
-	TNode* curr = (*head);
-	for (; curr; curr = curr->next) {
-		TNode* minEl = listFindMin(curr);
-
-		if (minEl != curr) {
-			int tmp = curr->val;
-			curr->val = minEl->val;
-			minEl->val = tmp;
-		}
-	}
-	return 1;
-}
-
-int listCOUT(const TNode* head) {
-	if (head == NULL) {
-		return 0;
+		return;
 	}
 
 	int i = 0;
@@ -206,22 +132,21 @@ int listCOUT(const TNode* head) {
 		printf("value: %d\n", head->val);
 		printf("address: %p\n\n", (void*)head);
 	}
-	return 1;
 }
 
-int listFree(TNode** head) {
+void listFree(TNode** head) {
 	if ((*head) == NULL) {
-		return 0;
+		return;
 	}
+
 	TNode* prev = NULL;
 	for (; (*head)->next; ) {
 		prev = (*head);
 		(*head) = (*head)->next;
 		free(prev);
 	}
-	free((*head));
 
-	return 1;
+	free((*head));
 }
 
 int main() {
