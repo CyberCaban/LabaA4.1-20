@@ -85,40 +85,23 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 
 		//shifting minEl
 		if (prevMinEl != NULL) { // if minEl in the middle of list
-			if (prevMinEl->next->val >= 0){ // if minEl >= 0
+			if (prevMinEl->next->val >= 0) { // if minEl >= 0
 				break;
 			}
-			if (prevMinEl->next->next){ // if list have tail after minEl
-				tmp = prevMinEl->next->next;
-				//moving minEl to new list
-				if ((*headOUT) == NULL) { // if new list empty
-					prevMinEl->next->next = NULL;
-					(*headOUT) = prevMinEl->next;
-					prevMinEl->next = tmp;
-				}
-				else { // if new list not empty
-					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
-						if (currOUT->next == NULL) {
-							prevMinEl->next->next = NULL;
-							currOUT->next = prevMinEl->next;
-							prevMinEl->next = tmp;
-							break;
-						}
-					}
-				}
+			tmp = prevMinEl->next->next;
+			//moving minEl to new list
+			if ((*headOUT) == NULL) { // if new list empty
+				prevMinEl->next->next = NULL;
+				(*headOUT) = prevMinEl->next;
+				prevMinEl->next = tmp;
 			}
-			else { // if list doesn't have tail after minEl
-				if ((*headOUT) == NULL) {// if new list empty
-					(*headOUT) = prevMinEl->next;
-					prevMinEl->next = NULL;
-				}
-				else { // if new list not empty
-					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
-						if (currOUT->next == NULL) {
-							currOUT->next = prevMinEl->next;
-							prevMinEl->next = NULL;
-							break;
-						}
+			else { // if new list not empty
+				for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+					if (currOUT->next == NULL) {
+						prevMinEl->next->next = NULL;
+						currOUT->next = prevMinEl->next;
+						prevMinEl->next = tmp;
+						break;
 					}
 				}
 			}
@@ -127,38 +110,20 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 			if (curr->val >= 0) {
 				break;
 			}
-			if (curr->next) { // if list have tail after minEl
-				tmp = curr->next;
+			tmp = curr->next;
 
-				if ((*headOUT) == NULL) {
-					(*headIN)->next = NULL;
-					(*headOUT) = (*headIN);
-					(*headIN) = tmp;
-				}
-				else {
-					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
-						if (currOUT->next == NULL) {
-							(*headIN)->next = NULL;
-							currOUT->next = (*headIN);
-							(*headIN) = tmp;
-							break;
-						}
-					}
-				}
+			if ((*headOUT) == NULL) {
+				(*headIN)->next = NULL;
+				(*headOUT) = (*headIN);
+				(*headIN) = tmp;
 			}
-			else { // if list doesn't have tail after minEl
-				if ((*headOUT) == NULL) {// if new list empty
-					(*headOUT) = curr;
-					(*headIN) = NULL;
-					return;
-				}
-				else {// if new list not empty
-					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
-						if (currOUT->next == NULL) {
-							currOUT->next = (*headIN);
-							(*headIN) = NULL;
-							return;
-						}
+			else {
+				for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+					if (currOUT->next == NULL) {
+						(*headIN)->next = NULL;
+						currOUT->next = (*headIN);
+						(*headIN) = tmp;
+						break;
 					}
 				}
 			}
