@@ -48,56 +48,23 @@ int listCIN(TNode** head) {
 	return 1;
 }
 
-int listPop(TNode** head) {
-	int retVal;
-	TNode* nextNode = NULL;
-
-	if ((*head) == NULL) {
-		return 0;
-	}
-
-	nextNode = (*head)->next;
-	retVal = (*head)->val;
-	free(*head);
-	(*head) = nextNode;
-
-	return retVal;
-}
-
 TNode* listFindPrevMin(TNode* head) {
-	TNode* curr = head, * tmp = head;
+	TNode* curr = head, * minEl = head;
 
+	// finding minimal element (minEl)
 	for (; curr; curr = curr->next) {
-		if (curr->val < tmp->val) {
-			tmp = curr;
+		if (curr->val < minEl->val) {
+			minEl = curr;
 		}
 	}
+	// finding an element before minEl
 	for (curr = head; curr; curr = curr->next) {
-		if (curr == tmp) {
+		//minEl is head
+		if (curr == minEl) {
 			return NULL;
 		}
-		if (curr->next == tmp) {
-			head = curr; 
-			break;
-		}
-	}
-
-	return head;
-}
-
-void listDelNth(TNode** head, TNode* delEl) {
-	if ((*head) == delEl) {
-		listPop(head);
-	}
-	else {
-		TNode* prev = (*head), * curr = (*head)->next;
-
-		for (; prev; curr = curr->next, prev = prev->next) {
-			if (curr == delEl) {
-				prev->next = curr->next;
-				free(curr);
-				break;
-			}
+		if (curr->next == minEl) {
+			return curr;
 		}
 	}
 }
@@ -108,25 +75,31 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 		return;
 	}
 
-	for (TNode* curr = (*headIN); curr; curr = curr->next) {
+	for (TNode* curr = (*headIN); curr;) {
 		curr = (*headIN);
 		if (curr == NULL) {
 			break;
 		}
 
 		TNode* prevMinEl = listFindPrevMin(curr);
-		if (prevMinEl != NULL) {
-			if (prevMinEl->next->next){
-				tmp = prevMinEl->next->next;
 
-				if ((*headOUT) == NULL) {
+		//shifting minEl
+		if (prevMinEl != NULL) { // if minEl in the middle of list
+			if (prevMinEl->next->val >= 0){ // if minEl >= 0
+				break;
+			}
+			if (prevMinEl->next->next){ // if list have tail after minEl
+				tmp = prevMinEl->next->next;
+				//moving minEl to new list
+				if ((*headOUT) == NULL) { // if new list empty
 					prevMinEl->next->next = NULL;
 					(*headOUT) = prevMinEl->next;
 					prevMinEl->next = tmp;
 				}
-				else {
+				else { // if new list not empty
 					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
 						if (currOUT->next == NULL) {
+							prevMinEl->next->next = NULL;
 							currOUT->next = prevMinEl->next;
 							prevMinEl->next = tmp;
 							break;
@@ -134,12 +107,12 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 					}
 				}
 			}
-			else {
-				if ((*headOUT) == NULL) {
+			else { // if list doesn't have tail after minEl
+				if ((*headOUT) == NULL) {// if new list empty
 					(*headOUT) = prevMinEl->next;
 					prevMinEl->next = NULL;
 				}
-				else {
+				else { // if new list not empty
 					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
 						if (currOUT->next == NULL) {
 							currOUT->next = prevMinEl->next;
@@ -150,36 +123,41 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 				}
 			}
 		}
-		else {
-			if (curr->next) {
+		else {// if minEl in the head of list
+			if (curr->val >= 0) {
+				break;
+			}
+			if (curr->next) { // if list have tail after minEl
 				tmp = curr->next;
 
 				if ((*headOUT) == NULL) {
-					curr->next = NULL;
-					(*headOUT) = curr;
-					curr = tmp;
+					(*headIN)->next = NULL;
+					(*headOUT) = (*headIN);
+					(*headIN) = tmp;
 				}
 				else {
 					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
 						if (currOUT->next == NULL) {
-							currOUT->next = prevMinEl->next;
-							prevMinEl->next = tmp;
+							(*headIN)->next = NULL;
+							currOUT->next = (*headIN);
+							(*headIN) = tmp;
 							break;
 						}
 					}
 				}
 			}
-			else {
-				if ((*headOUT) == NULL) {
-					(*headOUT) = prevMinEl->next;
-					prevMinEl->next = NULL;
+			else { // if list doesn't have tail after minEl
+				if ((*headOUT) == NULL) {// if new list empty
+					(*headOUT) = curr;
+					(*headIN) = NULL;
+					return;
 				}
-				else {
+				else {// if new list not empty
 					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
 						if (currOUT->next == NULL) {
-							currOUT->next = prevMinEl->next;
-							prevMinEl->next = NULL;
-							break;
+							currOUT->next = (*headIN);
+							(*headIN) = NULL;
+							return;
 						}
 					}
 				}
@@ -193,10 +171,10 @@ void listCOUT(const TNode* head) {
 		return;
 	}
 
-	for (int i = 0; head; head = head->next, i++) {
-		printf("List No. %d\n", i);
+	for (int i = 1; head; head = head->next, i++) {
+		printf("\nList No. %d\n", i);
 		printf("value: %d\n", head->val);
-		printf("address: %p\n\n", (void*)head);
+		//printf("address: %p\n\n", (void*)head);
 	}
 }
 
