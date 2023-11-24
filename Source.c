@@ -15,7 +15,7 @@ void pushEnd(TNode** head, int data) {
 	}
 	tmp->next = NULL;
 
-	TNode* curr = (*head); 
+	TNode* curr = (*head);
 	if (curr == NULL) {
 		tmp->val = data;
 		(*head) = tmp;
@@ -64,17 +64,22 @@ int listPop(TNode** head) {
 	return retVal;
 }
 
-TNode* listFindMin(TNode* head) {
-	TNode* nextEL = head->next;
+TNode* listFindPrevMin(TNode* head) {
+	TNode* curr = head, * tmp = head;
 
-	for (; nextEL;) {
-		if (nextEL == NULL) {
-			return head;
+	for (; curr; curr = curr->next) {
+		if (curr->val < tmp->val) {
+			tmp = curr;
 		}
-		if (nextEL->val < head->val) {
-			head = nextEL;
+	}
+	for (curr = head; curr; curr = curr->next) {
+		if (curr == tmp) {
+			return NULL;
 		}
-		nextEL = nextEL->next;
+		if (curr->next == tmp) {
+			head = curr; 
+			break;
+		}
 	}
 
 	return head;
@@ -87,19 +92,18 @@ void listDelNth(TNode** head, TNode* delEl) {
 	else {
 		TNode* prev = (*head), * curr = (*head)->next;
 
-		while (prev) {
+		for (; prev; curr = curr->next, prev = prev->next) {
 			if (curr == delEl) {
 				prev->next = curr->next;
 				free(curr);
 				break;
 			}
-			curr = curr->next;
-			prev = prev->next;
 		}
 	}
 }
 
 void listCMAKE(TNode** headIN, TNode** headOUT) {
+	TNode* tmp = NULL;
 	if ((*headIN) == NULL) {
 		return;
 	}
@@ -110,13 +114,76 @@ void listCMAKE(TNode** headIN, TNode** headOUT) {
 			break;
 		}
 
-		TNode* minEl = listFindMin(curr);
-		if (minEl->val < 0) {
-			pushEnd(headOUT, minEl->val);
-			listDelNth(headIN, minEl);
+		TNode* prevMinEl = listFindPrevMin(curr);
+		if (prevMinEl != NULL) {
+			if (prevMinEl->next->next){
+				tmp = prevMinEl->next->next;
+
+				if ((*headOUT) == NULL) {
+					prevMinEl->next->next = NULL;
+					(*headOUT) = prevMinEl->next;
+					prevMinEl->next = tmp;
+				}
+				else {
+					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+						if (currOUT->next == NULL) {
+							currOUT->next = prevMinEl->next;
+							prevMinEl->next = tmp;
+							break;
+						}
+					}
+				}
+			}
+			else {
+				if ((*headOUT) == NULL) {
+					(*headOUT) = prevMinEl->next;
+					prevMinEl->next = NULL;
+				}
+				else {
+					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+						if (currOUT->next == NULL) {
+							currOUT->next = prevMinEl->next;
+							prevMinEl->next = NULL;
+							break;
+						}
+					}
+				}
+			}
 		}
 		else {
-			break;
+			if (curr->next) {
+				tmp = curr->next;
+
+				if ((*headOUT) == NULL) {
+					curr->next = NULL;
+					(*headOUT) = curr;
+					curr = tmp;
+				}
+				else {
+					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+						if (currOUT->next == NULL) {
+							currOUT->next = prevMinEl->next;
+							prevMinEl->next = tmp;
+							break;
+						}
+					}
+				}
+			}
+			else {
+				if ((*headOUT) == NULL) {
+					(*headOUT) = prevMinEl->next;
+					prevMinEl->next = NULL;
+				}
+				else {
+					for (TNode* currOUT = (*headOUT); currOUT; currOUT = currOUT->next) {
+						if (currOUT->next == NULL) {
+							currOUT->next = prevMinEl->next;
+							prevMinEl->next = NULL;
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -126,8 +193,7 @@ void listCOUT(const TNode* head) {
 		return;
 	}
 
-	int i = 0;
-	for (; head; head = head->next, i++) {
+	for (int i = 0; head; head = head->next, i++) {
 		printf("List No. %d\n", i);
 		printf("value: %d\n", head->val);
 		printf("address: %p\n\n", (void*)head);
@@ -153,14 +219,17 @@ int main() {
 	TNode* listIN = NULL;
 	TNode* listOUT = NULL;
 
-	printf("enter list items, end the entry with a .\n");
+	printf("enter list items, end the entry with a '.'\n");
 	if (!listCIN(&listIN)) {
 		return;
 	}
 
+	printf("\ninput before\n");
+	listCOUT(listIN);
+
 	listCMAKE(&listIN, &listOUT);
 
-	printf("\ninput\n");
+	printf("\ninput after\n");
 	listCOUT(listIN);
 
 	printf("\noutput\n");
