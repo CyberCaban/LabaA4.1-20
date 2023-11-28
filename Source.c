@@ -35,9 +35,11 @@ int listCIN(TNode** head) {
 	int tmp;
 	char ch;
 
+	printf("Enter list items, end the entry with a '.'\n");
+
 	while (1) {
 		if (!scanf("%d%c", &tmp, &ch)) {
-			printf("invalid input");
+			printf("Invalid input");
 			return 0;
 		}
 		pushEnd(head, tmp);
@@ -148,21 +150,18 @@ void listFree(TNode** head) {
 		return;
 	}
 
-	TNode* prev = NULL;
-	for (; (*head)->next; ) {
-		prev = (*head);
-		(*head) = (*head)->next;
-		free(prev);
+	TNode* next;
+	for (; (*head);) {
+		next = (*head)->next;
+		free((*head));
+		(*head) = next;
 	}
-
-	free((*head));
 }
 
 int main() {
 	TNode* listIN = NULL;
 	TNode* listOUT = NULL;
 
-	printf("enter list items, end the entry with a '.'\n");
 	if (!listCIN(&listIN)) {
 		return;
 	}
